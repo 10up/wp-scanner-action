@@ -1,0 +1,51 @@
+---
+name: 'WordPress Scanner Action'
+description: 'Scan WordPress sites for plugins and themes vulnerabilities, PHP syntax and viruses'
+author: 10up
+branding:
+  icon: 'shield'
+  color: 'blue'
+inputs:
+  vuln_api_provider:
+    description: 'Vulnerability API provider'
+    required: true
+  vuln_api_token:
+    description: 'Token to authenticate with the vulnerability API provider'
+    required: false
+  disable_vuln_scan:
+    description: 'Disable the Plugin and Themes scanner'
+    required: false
+    default: 'false'
+  virus_scan_update:
+    description: 'Update the ClamAV definitions database before executing the virus scan'
+    required: false
+    default: 'true'
+  disable_virus_scan:
+    description: 'Disable the virus scanner'
+    required: false
+    default: 'false'
+  phpsyntax_enable_debug:
+    description: 'Enable PHP syntax debug output'
+    required: false
+    default: 'false'
+  disable_phpsyntax_check:
+    description: 'Disable the PHP syntax check'
+    required: false
+    default: 'false'
+  content_dir:
+    description: 'Location of the wp-content directory inside the repository'
+    required: false
+  wp_core_version:
+    description: 'WordPress Core version to use for the vulnerability scans'
+    required: false
+  composer_build:
+    description: 'Run composer install before scanning'
+    required: false
+    default: 'false'
+  no_fail:
+    description: 'Exit without failing even if any issues are found'
+    required: false
+    default: 'false'
+runs:
+  using: 'docker'
+  image: 'docker://ghcr.io/10up//wp-scanner-action:latest'
