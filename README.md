@@ -2,7 +2,7 @@
 
 > Performs syntax checks, virus scanning and plugins and themes vulnerability checks for WordPress sites
 
-[![Support Level](https://img.shields.io/badge/support-active-green.svg)](#support-level) [![Release Version](https://img.shields.io/github/release/10up/wp-scanner-action.svg)](https://github.com/10up/wp-scanner-action/releases/latest) [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://github.com/10up/wp-scanner-action/blob/trunk/LICENSE) [![Automated Tests](https://github.com/10up/wp-scanner-action/actions/workflows/test.yml/badge.svg)](https://github.com/10up/wp-scanner-action/actions/workflows/test.yml)
+[![Support Level](https://img.shields.io/badge/support-active-green.svg)](#support-level) [![Release Version](https://img.shields.io/github/release/10up/wp-scanner-action.svg)](https://github.com/10up/wp-scanner-action/releases/latest) [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://github.com/10up/wp-scanner-action/blob/trunk/LICENSE) [![Automated Tests](https://github.com/10up/wp-scanner-action/actions/workflows/tests.yml/badge.svg)](https://github.com/10up/wp-scanner-action/actions/workflows/tests.yml)
 
 This Github Action performs standard scanning for WordPress sites which includes PHP syntax checks, virus scanning and plugins and themes vulnerabilities scanning.
 
