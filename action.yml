@@ -48,4 +48,4 @@ inputs:
     default: 'false'
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/10up//wp-scanner-action:latest'
+  image: 'docker://ghcr.io/10up/wp-scanner-action:latest'
