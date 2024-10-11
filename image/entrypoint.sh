@@ -8,6 +8,10 @@ SHELL_RED="\033[0;31m"
 SHELL_GREEN="\033[0;32m"
 # Set wp-content directory location
 WP_CONTENT_DIR="${INPUT_CONTENT_DIR:-$GITHUB_WORKSPACE}"
+# if WP_CONTENT_DIR is set to "/" then set it to "./" to avord referencing root directory
+[ "${WP_CONTENT_DIR}" = "/" ] && WP_CONTENT_DIR="./"
+# Ensure WP_CONTENT_DIR ends with a slash
+[[ "${WP_CONTENT_DIR}" != */ ]] && WP_CONTENT_DIR="${WP_CONTENT_DIR}/"
 # Set PHP syntax check variables
 OUTPUT_REDIRECT="1>/dev/null"
 FAILED_MESSAGE_POSTFIX=""
@@ -47,7 +51,7 @@ function php_syntax_check {
 function virus_scan {
   if [ "${INPUT_VIRUS_SCAN_UPDATE}" = "true" ]; then
     shell_green "Updating ClamAV definitions database"
-    freshclam --verbose
+    freshclam
   fi
 
   shell_green "##### Starting virus scan #####"
@@ -102,13 +106,14 @@ function setup_wordpress {
 
   # Install WordPress
   pushd wordpress || exit 1
+  rm -f wp-config.php
   wp --allow-root config create --dbname=wordpress --dbuser=root --dbpass=password --dbhost=127.0.0.1
   wp --allow-root core install --url=10upvulnerabilitytest.net --title='WordPress Vulnerability Test' --admin_user=admin --admin_password=password --admin_email=10upvulnerabilitytest@example.net --skip-email
   popd || exit 1
 }
 
-# function to execute WordPress vulnerability scan
-function wp_vuln_scan {
+# Function to setup WPCLI vulnerability scanner
+function setup_wpcli_vuln_scanner {
   # Check if the vuln_api_token is present for wpscan and patchstack providers
   if [ "${INPUT_VULN_API_PROVIDER}" != 'wordfence' ] && [ -z "${INPUT_VULN_API_TOKEN}" ]; then
     shell_red "vuln_api_token input is required for ${INPUT_VULN_API_PROVIDER} provider. Please provide the token and re-run the scanner"
@@ -122,10 +127,13 @@ function wp_vuln_scan {
   pushd wordpress || exit 1
   wp --allow-root config set VULN_API_PROVIDER "${INPUT_VULN_API_PROVIDER}"
   wp --allow-root config set VULN_API_TOKEN "${INPUT_VULN_API_TOKEN}"
+  popd || exit 1
+}
 
-  # Run WordPress themes vulnerability scan
+# Function to execute WordPress themes vulnerability scan
+function wp_themes_vuln_scan {
   shell_green "##### Starting WordPress Themes vulnerability scan #####"
-  THEMES_SCAN_OUTPUT=$(wp --allow-root vuln theme-status | grep -v 'Vulnerability API Provider' | grep -v 'status' | grep -v 'No vulnerabilities reported for this version of')
+  THEMES_SCAN_OUTPUT=$(wp --allow-root --path=wordpress/ vuln theme-status --porcelain)
   if [ -z "${THEMES_SCAN_OUTPUT}" ]; then
     shell_green "No theme vulnerabilities found"
   else
@@ -138,10 +146,12 @@ function wp_vuln_scan {
       return 1
     fi
   fi
+}
 
-  # Run WordPress Plugins vulnerability scan
+# Function to execute WordPress plugins vulnerability scan
+function wp_plugins_vuln_scan {
   shell_green "##### Starting WordPress Plugins vulnerability scan #####"
-  PLUGINS_SCAN_OUTPUT=$(wp --allow-root vuln plugin-status | grep -v 'Vulnerability API Provider' | grep -v 'status' | grep -v 'No vulnerabilities reported for this version of')
+  PLUGINS_SCAN_OUTPUT=$(wp --allow-root --path=wordpress/ vuln plugin-status --porcelain)
   if [ -z "${PLUGINS_SCAN_OUTPUT}" ]; then
     shell_green "No plugin vulnerabilities found"
   else
@@ -154,7 +164,6 @@ function wp_vuln_scan {
       return 1
     fi
   fi
-  popd || exit 1
 }
 
 # Execute PHP syntax check if not disabled
@@ -164,4 +173,4 @@ function wp_vuln_scan {
 [ "${INPUT_DISABLE_VIRUS_SCAN}" != "true" ] && virus_scan
 
 # Execute WordPress vulnerability scan if not disabled
-[ "${INPUT_DISABLE_WP_VULN_SCAN}" != "true" ] && setup_mariadb && setup_wordpress && wp_vuln_scan
+[ "${INPUT_DISABLE_WP_VULN_SCAN}" != "true" ] && setup_mariadb && setup_wordpress && setup_wpcli_vuln_scanner && wp_themes_vuln_scan && wp_plugins_vuln_scan

@@ -8,7 +8,7 @@ LABEL "com.github.actions.icon"="shield"
 LABEL "com.github.actions.color"="blue"
 
 LABEL maintainer="10upbot <10upbot+github@10up.com>"
-LABEL version="1.0.0"
+LABEL version="v1.0.1"
 LABEL repository="https://github.com/10up/wp-scanner-action"
 
 RUN apt-get update \

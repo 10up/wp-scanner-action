@@ -15,7 +15,7 @@ This Action leverages our own [WP-CLI Vulnerability Scanner](https://github.com/
 
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
-| `vuln_api_provider` | True | - | The vulnerability API provider for the WordPress plugins and themes scanning. Supported values: `wordfence`, `patchstack` and `wpscan` |
+| `vuln_api_provider` | False | `wordfence` | The vulnerability API provider for the WordPress plugins and themes scanning. Supported values: `wordfence`, `patchstack` and `wpscan` |
 | `vuln_api_token` | False | - | The API token to authenticate against the vulnerability API provider. This input is optional if `vuln_api_provider` is set to `wordfence` |
 | `disable_vuln_scan` | False | `false` | Disable the WordPress plugins and themes vulnerability scanner |
 | `virus_scan_update` | False | `true` | Update the ClamAV definitions database before executing the virus scanner (recommended) |
@@ -30,7 +30,7 @@ This Action leverages our own [WP-CLI Vulnerability Scanner](https://github.com/
 
 # Examples
 
-## Install Composer dependencies before scanning
+## Basic example with Composer dependencies
 
 This example assumes that you have a `wp-content` based repository and uses [Patchstack](https://patchstack.com/) as the API provider.
 
