@@ -137,7 +137,7 @@ function wp_themes_vuln_scan {
   if [ -z "${THEMES_SCAN_OUTPUT}" ]; then
     shell_green "No theme vulnerabilities found"
   else
-    wp --allow-root vuln theme-status --reference --format=yaml
+    wp --allow-root --path=wordpress/ vuln theme-status --reference --format=yaml
     shell_red "**** THEME VULNERABILITIES FOUND!!! **** PLEASE SEE REPORT ABOVE ****"
     # If no_fail input is set to true, exit without failure even if there are errors
     if [ "${INPUT_NO_FAIL}" = "true" ]; then
@@ -155,7 +155,7 @@ function wp_plugins_vuln_scan {
   if [ -z "${PLUGINS_SCAN_OUTPUT}" ]; then
     shell_green "No plugin vulnerabilities found"
   else
-    wp --allow-root vuln plugin-status --reference --format=yaml
+    wp --allow-root --path=wordpress/ vuln plugin-status --reference --format=yaml
     shell_red "**** PLUGIN VULNERABILITIES FOUND!!! **** PLEASE SEE REPORT ABOVE ****"
     # If no_fail input is set to true, exit without failure even if there are errors
     if [ "${INPUT_NO_FAIL}" = "true" ]; then
