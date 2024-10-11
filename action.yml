@@ -8,7 +8,8 @@ branding:
 inputs:
   vuln_api_provider:
     description: 'Vulnerability API provider'
-    required: true
+    required: false
+    default: 'wordfence'
   vuln_api_token:
     description: 'Token to authenticate with the vulnerability API provider'
     required: false
