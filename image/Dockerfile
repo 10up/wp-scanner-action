@@ -1,6 +1,6 @@
 FROM debian:stable-slim
 
-ARG PHP_VERSION=8.2
+ARG PHP_VERSION=8.3
 
 LABEL "com.github.actions.name"="WordPress Scanner Action"
 LABEL "com.github.actions.description"="Scan WordPress sites for plugins and themes vulnerabilities, PHP syntax and viruses"
